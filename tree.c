@@ -517,6 +517,18 @@ TNode* constructSegmentTree( double* points, int low, int high ){
  */
 void insertSegment( TNode* root, double segmentStart, double segmentEnd ){
     //TODO
+    if(root->leaf == true)
+        return;
+    else if(segmentStart == root->low || segmentEnd == root->high)
+        return;
+    else if(root->high - root->low < segmentEnd) {
+        root->cnt++;
+        return;
+    }
+    else {
+        insertSegment(root->pLeft, segmentStart, segmentEnd);
+        insertSegment(root->pRight, segmentStart, segmentEnd);
+    }
 }
 
 /* lineStabQuery
@@ -527,7 +539,15 @@ void insertSegment( TNode* root, double segmentStart, double segmentEnd ){
  */
 int lineStabQuery( TNode* root, double queryPoint ){
     //TODO
-    return -1;
+    if(root->leaf == true)
+        return 0;
+    else if(queryPoint == root->low || queryPoint == root->high) {
+        return 0;
+    }
+    else {
+        return lineStabQuery(root->pLeft, queryPoint) + lineStabQuery(root->pRight, queryPoint) + root->cnt;
+    }
+    // return -1;
 }
 
 

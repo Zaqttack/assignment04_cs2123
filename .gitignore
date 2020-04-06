@@ -1,3 +1,5 @@
 *.pdf
 *.txt
 *.vscode
+*.o
+driver
