@@ -142,7 +142,7 @@ void testAVLTree( ){
         temp->key = (char*)malloc( 31*sizeof(char) );
         createName( i, temp->key );
         insertTreeBalanced( pt, temp );
-        //checkAVLTree( pt->root );
+        // checkAVLTree( pt->root );
     }
     end = clock();
     printf( "Time to insert (in seconds): %lf\n" , (double)(end - start) / CLOCKS_PER_SEC );

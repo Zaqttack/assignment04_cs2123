@@ -1,10 +1,10 @@
-# Makefile comments……
+# Makefile commentsï¿½ï¿½
 PROGRAMS = driver
 CC = gcc
 CFLAGS = -Wall -g
 all: $(PROGRAMS)
 clean:
-	rm -f *.o
+	rm -f *.o driver
 # C compilations
 data.o: data.c data.h
 	$(CC) $(CFLAGS) -c data.c
