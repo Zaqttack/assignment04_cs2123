@@ -273,123 +273,53 @@ void updateHeights(TNode* root){
  * After this function runs, every node should be balanced (i.e. -2 < balance < 2).
  *
  * Hint: The t->root will need to be updated if you do a rotate on the current root.
- * 
- * Extra Helper functions I can create 
- * TNode* getTallerSubTree(TNode* root);
- * bool isSameSignBalance(TNode* x, TNode* z);
  */
 void rebalanceTree(Tree* t, TNode* x){ 
+    while(x != NULL) {
+        int xBalance = getBalance(x);
 
-    // while(x != NULL) {
-    //     // TNode* z = (TNode*)malloc(sizeof(TNode));
-    //     // int xLeft = subTreeHeight(x->pLeft);
-    //     // int xRight = subTreeHeight(x->pRight);
-    //     // int xBalance = xLeft - xRight;
-    //     TNode* tempNode = (TNode*)malloc(sizeof(TNode));
-    //     printf("entering rebalance\n");
+        if(xBalance == -2 || xBalance == 2) {
+            // setting z = to x-child with greate height difference
+            TNode* z = getTallerSubTree(x);
 
-        
-    //     // don't forget to call updateHeight()
-    //     if(getBalance(x) == 2) {
-    //         if(subTreeHeight(x->pLeft->pLeft) > subTreeHeight(x->pLeft->pRight)) {
-    //             printf("+2 rotating right\n");
-    //             tempNode = x->pLeft;
-    //             rightRotate(x);
-    //             x->pParent = tempNode;
-    //             updateHeights(x);
-    //         }
-    //         else {
-    //             printf("+2 rotating left:right\n");
-    //             // rotate left first
-    //             tempNode = x->pLeft->pRight;
-    //             leftRotate(x->pLeft);
-    //             x->pLeft->pParent = tempNode;
-    //             updateHeights(x->pLeft);
+            // checking sign is + || - between nodes x & z
+            if(isSameSignBalance(x, z) == false) {
+                // checking z height balance
+                if(getBalance(z) > 0)
+                    rightRotate(z);
+                else if(getBalance(z) < 0)
+                    leftRotate(z);
+            }
 
-    //             // rotate right second
-    //             tempNode = x->pLeft;
-    //             rightRotate(x);
-    //             x->pParent = tempNode;
-    //             updateHeights(x);
-    //         }
-    //     }
-    //     else if(getBalance(x) == -2) {
-    //         if(subTreeHeight(x->pRight->pLeft) > subTreeHeight(x->pRight->pRight)) {
-    //             printf("-2 rotating left\n");
-    //             tempNode = x->pRight;
-    //             leftRotate(x);
-    //             x->pParent = tempNode;
-    //             updateHeights(x);
-    //         }
-    //         else {
-    //             printf("-2 rotating right:left\n");
-    //             // rotate right first
-    //             tempNode = x->pRight->pLeft;
-    //             rightRotate(x->pRight);
-    //             x->pRight->pParent = tempNode;
-    //             updateHeights(x->pRight);
+            // balance of x: 2 || -2: right; left rotates
+            if(xBalance == 2)
+                rightRotate(x);
+            else if(xBalance == -2)
+                leftRotate(x);
 
-    //             // rotate left second
-    //             tempNode = x->pRight;
-    //             leftRotate(x);
-    //             x->pParent = tempNode;
-    //             updateHeights(x);
-    //         }
-    //     }
-
-    //     // if(x->pParent == NULL) {
-    //     //     // root needs to equal TNode??
-
-    //     // }
-
-    //     // //checking if balance is -2 or 2
-    //     // if(xBalance == -2 || xBalance == 2) {
-    //     //     // printf("balance b/w -2 or 2\n");
-    //     //     // setting z to the greater subtree (left or right)
-    //     //     int zBalance;
-
-    //     //     if(xLeft > xRight)
-    //     //         z = x->pLeft;
-    //     //     else
-    //     //         z = x->pRight;
-
-    //     //     // checking the balance signs ( + or - ) of x and z
-    //     //     zBalance = subTreeHeight(z->pLeft) - subTreeHeight(z->pRight);
-    //     //     if ((xBalance ^ zBalance) < 0) {
-    //     //         if(zBalance > 0)
-    //     //             rightRotate(z);
-    //     //         else
-    //     //             leftRotate(z);
-    //     //     }
-
-    //     //     // rotating x depending on a blanace of 2 or -2
-    //     //     if(xBalance == 2)
-    //     //         rightRotate(x);
-    //     //     else if(xBalance == -2)
-    //     //         leftRotate(x);
+            // update height of the rotated nodes
+            updateHeights(t->root);
             
-    //     //     // updating height of rotated nodes
-    //     //     TNode* tallerSubTree = getTallerSubTree(x);
-    //     //     x->height = tallerSubTree->height + 1;
-
-    //     //     // if x was the orig. root then update new root to the parent of x
-    //     //     x->pParent = x;
-    //     // }
-    //     // x = x->pParent;
-    //     // break;
-    // } 
+            // if x was root before update, update the root to parent of x
+            if(t->root == x)
+                t->root = x->pParent;
+        }
+        x = x->pParent;
+    }
 }
 
 TNode* getTallerSubTree(TNode* x) {
-    int leftHeight, rightHeight;
-
-    leftHeight = subTreeHeight(x->pLeft);
-    rightHeight = subTreeHeight(x->pRight);
-
-    if(leftHeight > rightHeight)
+    if(subTreeHeight(x->pLeft) > subTreeHeight(x->pRight))
         return x->pLeft;
     else
         return x->pRight;
+}
+
+bool isSameSignBalance(TNode* x, TNode* z) {
+    if((getBalance(x) ^ getBalance(z)) < 0)
+        return false;
+    else
+        return true;
 }
 
 /* rightRotate and leftRotate

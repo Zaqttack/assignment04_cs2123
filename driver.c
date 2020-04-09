@@ -146,7 +146,7 @@ void testAVLTree( ){
     }
     end = clock();
     printf( "Time to insert (in seconds): %lf\n" , (double)(end - start) / CLOCKS_PER_SEC );
-    //printTree( pt->root );
+    // printTree( pt->root );
 
     /* Time the remove function */
     start = clock();
@@ -166,16 +166,16 @@ void testAVLTree( ){
         }
 
         temp = removeTree( pt, testData );
-        //checkAVLTree( pt->root );
+        // checkAVLTree( pt->root );
         if( temp!=NULL ){
             printf( "Failed to remove: %s\n", testData );
             freeData( temp );
         }
-        //checkAVLTree( pt->root );
+        // checkAVLTree( pt->root );
     }
     end = clock();
     printf( "Time to remove (in seconds): %lf\n" , (double)(end - start) / CLOCKS_PER_SEC );
-    //printTree( pt->root );
+    // printTree( pt->root );
 
     /* Free all data in pt */
     freeTree( pt );
